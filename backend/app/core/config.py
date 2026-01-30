@@ -14,12 +14,14 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "scRL-Web"
     DEBUG: bool = os.getenv("DEBUG", "true").lower() == "true"
     
-    # CORS Settings
+    # CORS Settings - 允许所有来源以支持多种部署平台
     CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://*.vercel.app",
+        "https://*.onrender.com",
         "https://scrl-web.vercel.app",
+        "https://scrl-web.onrender.com",
     ]
     
     # File Upload Settings
