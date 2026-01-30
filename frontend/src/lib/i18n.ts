@@ -2,7 +2,7 @@ export const translations = {
   en: {
     // Header
     appName: 'scRL Web',
-    appDescription: 'Single-cell Fate Decision Analysis Platform · Actor-Critic Algorithm',
+    appDescription: 'Single-cell Fate Decision Analysis Platform',
     session: 'Session',
     initializing: 'Initializing...',
     exportResults: 'Export Results',
@@ -18,35 +18,35 @@ export const translations = {
     // Upload
     upload: {
       title: 'Upload Single-cell Data',
-      dragDrop: 'Drag and drop files here or',
+      dragDrop: 'Drag and drop files here, or',
       clickSelect: 'click to select',
       supportedFormats: 'Supported formats: .h5ad, .csv',
-      suggestion: 'Suggestion: Use preprocessed AnnData files for better results',
-      uploadButton: 'Upload and Load Data',
+      suggestion: 'Preprocessed AnnData files are recommended for optimal results.',
+      uploadButton: 'Upload Data',
       uploading: 'Uploading...',
     },
     
     // Preprocess
     preprocess: {
       title: 'Preprocessing Parameters',
-      minGenes: 'Min Genes',
-      minCells: 'Min Cells',
-      topGenes: 'HVG Count',
-      nPcs: 'PCA Dimensions',
-      nNeighbors: 'Neighbors',
-      startButton: 'Start Preprocessing',
+      minGenes: 'Min Genes per Cell',
+      minCells: 'Min Cells per Gene',
+      topGenes: 'Number of HVGs',
+      nPcs: 'PCA Components',
+      nNeighbors: 'Number of Neighbors',
+      startButton: 'Run Preprocessing',
       processing: 'Processing...',
     },
     
     // Training
     train: {
-      title: 'scRL Training Parameters',
-      hiddenDim: 'Hidden Dimensions',
-      nAgents: 'Agent Count',
+      title: 'Training Parameters',
+      hiddenDim: 'Hidden Dimension',
+      nAgents: 'Number of Agents',
       maxSteps: 'Max Steps per Episode',
       numEpisodes: 'Training Episodes',
       learningRate: 'Learning Rate',
-      gamma: 'Gamma (Discount Factor)',
+      gamma: 'Discount Factor',
       batchSize: 'Batch Size',
       memorySize: 'Memory Size',
       resolution: 'Cluster Resolution',
@@ -56,49 +56,49 @@ export const translations = {
     
     // Data Info
     dataInfo: {
-      title: 'Data Info',
+      title: 'Data Summary',
       cells: 'Cells',
       genes: 'Genes',
-      hvg: 'HVG',
+      hvg: 'HVGs',
       embeddings: 'Embeddings',
     },
     
     // Visualization
     visualization: {
-      title: 'UMAP Visualization',
+      title: 'Embedding Visualization',
     },
     
     // Results
     results: {
-      title: 'Analysis Results Summary',
-      summary: 'Analysis Results Summary',
+      title: 'Analysis Results',
+      summary: 'Results Summary',
       branches: 'Identified Branches',
       pseudotimeRange: 'Pseudotime Range',
       entropyRange: 'Entropy Range',
       analysisMode: 'Analysis Mode',
       actorCriticAlgorithm: 'Actor-Critic',
-      simulatedMode: 'Simulated Mode',
-      simulatedWarning: 'Currently using simulated data mode (scRL library not installed). Actual analysis requires scRL installation on the backend.',
-      trainingProcess: 'Training Process',
+      simulatedMode: 'Simulation Mode',
+      simulatedWarning: 'Running in simulation mode (scRL library not installed). Install scRL on the backend for actual analysis.',
+      trainingProcess: 'Training Progress',
       trainingRewards: 'Training Rewards',
       trainingErrors: 'Training Errors',
     },
     
     // Welcome
     welcome: {
-      title: 'Start scRL Analysis',
-      description: 'Upload your single-cell data, use Actor-Critic reinforcement learning algorithm to analyze cell fate decisions and calculate pseudotime',
+      title: 'scRL Analysis',
+      description: 'Upload single-cell data to analyze cell fate decisions and compute pseudotime using the Actor-Critic reinforcement learning algorithm.',
       features: {
-        actorCritic: 'Actor-Critic Algorithm',
-        multiAgent: 'Multi-Agent Learning',
-        noPrior: 'No Prior Knowledge Required',
+        actorCritic: 'Actor-Critic',
+        multiAgent: 'Multi-Agent',
+        noPrior: 'No Prior Required',
       },
     },
     
     // Status
     status: {
       starting: 'Starting preprocessing...',
-      initializing: 'Initializing scRL model...',
+      initializing: 'Initializing model...',
       complete: 'Complete',
       training: 'Training in progress...',
       episode: 'Episode',
@@ -113,7 +113,7 @@ export const translations = {
   zh: {
     // Header
     appName: 'scRL Web',
-    appDescription: '单细胞命运决策分析平台 · Actor-Critic算法',
+    appDescription: '单细胞命运决策分析平台',
     session: '会话',
     initializing: '初始化中...',
     exportResults: '导出结果',
@@ -123,43 +123,43 @@ export const translations = {
       upload: '数据上传',
       preprocess: '预处理',
       train: '训练模型',
-      results: '结果展示',
+      results: '结果',
     },
     
     // Upload
     upload: {
       title: '上传单细胞数据',
-      dragDrop: '拖放文件到此处或',
+      dragDrop: '拖放文件到此处，或',
       clickSelect: '点击选择',
       supportedFormats: '支持格式: .h5ad, .csv',
-      suggestion: '建议: 使用预处理后的AnnData文件效果更佳',
-      uploadButton: '上传并加载数据',
+      suggestion: '建议使用预处理后的AnnData文件以获得更好的分析效果。',
+      uploadButton: '上传数据',
       uploading: '上传中...',
     },
     
     // Preprocess
     preprocess: {
       title: '预处理参数',
-      minGenes: '最小基因数',
-      minCells: '最小细胞数',
-      topGenes: '高变基因数',
-      nPcs: 'PCA维数',
-      nNeighbors: '邻居数',
-      startButton: '开始预处理',
+      minGenes: '每个细胞最小基因数',
+      minCells: '每个基因最小细胞数',
+      topGenes: '高变基因数量',
+      nPcs: 'PCA主成分数',
+      nNeighbors: '邻居数量',
+      startButton: '运行预处理',
       processing: '处理中...',
     },
     
     // Training
     train: {
-      title: 'scRL训练参数',
+      title: '训练参数',
       hiddenDim: '隐藏层维度',
       nAgents: 'Agent数量',
       maxSteps: '每轮最大步数',
       numEpisodes: '训练轮数',
       learningRate: '学习率',
-      gamma: 'Gamma (折扣因子)',
+      gamma: '折扣因子',
       batchSize: '批次大小',
-      memorySize: '记忆大小',
+      memorySize: '记忆容量',
       resolution: '聚类分辨率',
       runButton: '开始训练',
       training: '训练中...',
@@ -167,7 +167,7 @@ export const translations = {
     
     // Data Info
     dataInfo: {
-      title: '数据信息',
+      title: '数据概要',
       cells: '细胞数',
       genes: '基因数',
       hvg: '高变基因',
@@ -176,42 +176,42 @@ export const translations = {
     
     // Visualization
     visualization: {
-      title: 'UMAP可视化',
+      title: 'Embedding可视化',
     },
     
     // Results
     results: {
-      title: '分析结果摘要',
-      summary: '分析结果摘要',
-      branches: '识别分支数',
+      title: '分析结果',
+      summary: '结果概要',
+      branches: '识别的分支数',
       pseudotimeRange: 'Pseudotime范围',
       entropyRange: 'Entropy范围',
       analysisMode: '分析模式',
-      actorCriticAlgorithm: 'Actor-Critic算法',
+      actorCriticAlgorithm: 'Actor-Critic',
       simulatedMode: '模拟模式',
-      simulatedWarning: '当前使用模拟数据模式（未安装scRL库）。实际分析需要在后端环境中安装scRL。',
-      trainingProcess: '训练过程',
+      simulatedWarning: '当前为模拟模式（未安装scRL库）。实际分析需要在后端安装scRL。',
+      trainingProcess: '训练进度',
       trainingRewards: '训练奖励',
       trainingErrors: '训练误差',
     },
     
     // Welcome
     welcome: {
-      title: '开始scRL分析',
-      description: '上传您的单细胞数据，使用Actor-Critic强化学习算法分析细胞命运决策并计算pseudotime',
+      title: 'scRL分析',
+      description: '上传单细胞数据，使用Actor-Critic强化学习算法分析细胞命运决策并计算pseudotime。',
       features: {
-        actorCritic: 'Actor-Critic算法',
-        multiAgent: '多智能体学习',
-        noPrior: '无需先验知识',
+        actorCritic: 'Actor-Critic',
+        multiAgent: '多智能体',
+        noPrior: '无需先验',
       },
     },
     
     // Status
     status: {
       starting: '开始预处理...',
-      initializing: '初始化scRL模型...',
+      initializing: '初始化模型...',
       complete: '完成',
-      training: '训练进行中...',
+      training: '训练中...',
       episode: '轮次',
     },
     
