@@ -1,0 +1,6 @@
+services:
+  backend:
+    build: .
+    environment:
+      RAILWAY_STATIC_URL: ${RAILWAY_STATIC_URL}
+      PORT: ${PORT:-8000}
