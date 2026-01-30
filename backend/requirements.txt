@@ -1,0 +1,27 @@
+# FastAPI and server
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# scRL dependencies
+scrl-fatedecision>=0.0.7
+scanpy>=1.9.0
+anndata>=0.8.0
+numpy>=1.23.5
+pandas>=1.5.2
+scikit-learn>=1.2.1
+torch>=1.13.1
+networkx>=2.8.8
+matplotlib>=3.6.3
+seaborn>=0.11.2
+joblib>=1.2.0
+tqdm>=4.64.1
+pygam>=0.8.0
+
+# API utilities
+pydantic>=2.0.0
+python-jose[cryptography]>=3.3.0
+aiofiles>=23.0.0
+
+# For deployment
+gunicorn>=21.0.0
