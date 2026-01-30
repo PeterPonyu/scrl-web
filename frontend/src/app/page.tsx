@@ -5,19 +5,23 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { FileUploader } from '@/components/FileUploader';
 import { ScatterPlot } from '@/components/ScatterPlot';
 import { PipelineSteps } from '@/components/PipelineSteps';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/lib/LanguageContext';
 import { dataApi, analysisApi, trainingApi, resultsApi, SessionStatus, EmbeddingData, GridData } from '@/lib/api';
 import { Loader2, Play, Settings, BarChart3, GitBranch, Dna, AlertCircle, CheckCircle } from 'lucide-react';
 
-const PIPELINE_STEPS = [
-  { id: 'upload', name: 'Upload Data', description: 'Upload single-cell data file' },
-  { id: 'preprocess', name: 'Preprocess', description: 'Normalize, transform, and cluster' },
-  { id: 'grid', name: 'Generate Grid', description: 'Create grid embedding' },
-  { id: 'pseudotime', name: 'Align Pseudotime', description: 'Calculate developmental time' },
-  { id: 'rewards', name: 'Generate Rewards', description: 'Set up RL reward system' },
-  { id: 'train', name: 'Train Model', description: 'Train the RL agent' },
-];
-
 export default function HomePage() {
+  const { t } = useLanguage();
+  
+  const PIPELINE_STEPS = [
+    { id: 'upload', name: t.steps.upload, description: t.upload.title },
+    { id: 'preprocess', name: t.steps.preprocess, description: t.preprocess.title },
+    { id: 'grid', name: 'Grid', description: 'Generate Grid' },
+    { id: 'pseudotime', name: 'Pseudotime', description: 'Align Pseudotime' },
+    { id: 'rewards', name: 'Rewards', description: 'Generate Rewards' },
+    { id: 'train', name: t.steps.train, description: t.train.title },
+  ];
+
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState('upload');
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
@@ -198,10 +202,8 @@ export default function HomePage() {
       case 'upload':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 1: Upload Your Data</h2>
-            <p className="text-gray-600">
-              Upload your single-cell RNA sequencing data file or use a demo dataset.
-            </p>
+            <h2 className="text-xl font-semibold">{t.upload.title}</h2>
+            <p className="text-gray-600">{t.upload.suggestion}</p>
             <FileUploader
               onFileSelect={(file) => uploadMutation.mutate(file)}
               onDemoSelect={() => demoMutation.mutate()}
@@ -210,7 +212,7 @@ export default function HomePage() {
             {dataInfo && (
               <div className="p-4 bg-green-50 rounded-lg">
                 <p className="text-green-800">
-                  ✓ Loaded {dataInfo.n_cells.toLocaleString()} cells × {dataInfo.n_genes.toLocaleString()} genes
+                  ✓ {t.dataInfo.cells}: {dataInfo.n_cells.toLocaleString()} × {t.dataInfo.genes}: {dataInfo.n_genes.toLocaleString()}
                 </p>
               </div>
             )}
@@ -220,10 +222,8 @@ export default function HomePage() {
       case 'preprocess':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 2: Preprocessing</h2>
-            <p className="text-gray-600">
-              Configure preprocessing parameters for your data.
-            </p>
+            <h2 className="text-xl font-semibold">{t.preprocess.title}</h2>
+            <p className="text-gray-600">{t.upload.suggestion}</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="label">Embedding Method</label>
@@ -237,7 +237,7 @@ export default function HomePage() {
                 </select>
               </div>
               <div>
-                <label className="label">Number of PCs</label>
+                <label className="label">{t.preprocess.nPcs}</label>
                 <input
                   type="number"
                   className="input"
@@ -266,7 +266,7 @@ export default function HomePage() {
               className="btn btn-primary w-full"
             >
               {preprocessMutation.isPending ? <Loader2 className="animate-spin mr-2" /> : <Play className="mr-2 h-4 w-4" />}
-              Run Preprocessing
+              {t.preprocess.startButton}
             </button>
           </div>
         );
@@ -274,7 +274,7 @@ export default function HomePage() {
       case 'grid':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 3: Generate Grid Embedding</h2>
+            <h2 className="text-xl font-semibold">Generate Grid Embedding</h2>
             <p className="text-gray-600">
               Transform the 2D embedding into a structured grid for RL navigation.
             </p>
@@ -316,7 +316,7 @@ export default function HomePage() {
       case 'pseudotime':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 4: Align Pseudotime</h2>
+            <h2 className="text-xl font-semibold">Align Pseudotime</h2>
             <p className="text-gray-600">
               Select the starting cluster (typically stem/progenitor cells) for pseudotime calculation.
             </p>
@@ -346,7 +346,7 @@ export default function HomePage() {
       case 'rewards':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 5: Configure Rewards</h2>
+            <h2 className="text-xl font-semibold">Configure Rewards</h2>
             <p className="text-gray-600">
               Set up the reward system for RL training.
             </p>
@@ -424,13 +424,11 @@ export default function HomePage() {
       case 'train':
         return (
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Step 6: Train RL Model</h2>
-            <p className="text-gray-600">
-              Train the Actor-Critic model to learn cellular fate decisions.
-            </p>
+            <h2 className="text-xl font-semibold">{t.train.title}</h2>
+            <p className="text-gray-600">{t.welcome.description}</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="label">Number of Episodes</label>
+                <label className="label">{t.train.numEpisodes}</label>
                 <input
                   type="number"
                   className="input"
@@ -442,7 +440,7 @@ export default function HomePage() {
                 />
               </div>
               <div>
-                <label className="label">Discount Factor (γ)</label>
+                <label className="label">{t.train.gamma}</label>
                 <input
                   type="number"
                   className="input"
@@ -460,12 +458,12 @@ export default function HomePage() {
               className="btn btn-primary w-full"
             >
               {trainingMutation.isPending ? <Loader2 className="animate-spin mr-2" /> : <Play className="mr-2 h-4 w-4" />}
-              Start Training
+              {t.train.runButton}
             </button>
             {trainingResult && (
               <div className="p-4 bg-green-50 rounded-lg">
                 <p className="text-green-800">
-                  ✓ Training completed in {trainingResult.training_time.toFixed(1)}s
+                  ✓ {t.status.complete} - {trainingResult.training_time.toFixed(1)}s
                 </p>
                 <p className="text-green-600 text-sm">
                   Final reward: {trainingResult.final_reward.toFixed(3)}
@@ -491,12 +489,15 @@ export default function HomePage() {
                 <Dna className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">scRL-Web</h1>
-                <p className="text-xs text-gray-500">Single-cell Reinforcement Learning</p>
+                <h1 className="text-xl font-bold text-gray-900">{t.appName}</h1>
+                <p className="text-xs text-gray-500">{t.appDescription}</p>
               </div>
             </div>
-            <div className="text-sm text-gray-500">
-              {sessionId && <span>Session: {sessionId.slice(0, 8)}...</span>}
+            <div className="flex items-center gap-4">
+              <LanguageSwitcher />
+              <div className="text-sm text-gray-500">
+                {sessionId && <span>{t.session}: {sessionId.slice(0, 8)}...</span>}
+              </div>
             </div>
           </div>
         </div>
@@ -541,7 +542,7 @@ export default function HomePage() {
             <div className="card">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
-                  Visualization
+                  {t.visualization.title}
                 </h3>
                 {embeddingData && (
                   <select
@@ -576,11 +577,11 @@ export default function HomePage() {
                   colorBy={colorBy}
                   width={350}
                   height={350}
-                  title={`Cell Embedding (${dataInfo?.n_cells.toLocaleString()} cells)`}
+                  title={`Cell Embedding (${dataInfo?.n_cells.toLocaleString()} ${t.dataInfo.cells})`}
                 />
               ) : (
                 <div className="h-[350px] flex items-center justify-center bg-gray-50 rounded-lg">
-                  <p className="text-gray-400">Upload data to see visualization</p>
+                  <p className="text-gray-400">{t.welcome.title}</p>
                 </div>
               )}
 
@@ -588,11 +589,10 @@ export default function HomePage() {
                 <div className="mt-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg border border-green-200">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="w-5 h-5 text-green-600" />
-                    <span className="font-medium text-green-800">Analysis Complete!</span>
+                    <span className="font-medium text-green-800">{t.status.complete}!</span>
                   </div>
                   <p className="text-sm text-green-700">
-                    The model has identified fate decision strengths across {dataInfo?.n_cells.toLocaleString()} cells.
-                    Higher values indicate stronger fate commitment points.
+                    {t.results.summary}
                   </p>
                 </div>
               )}
