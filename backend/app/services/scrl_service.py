@@ -159,6 +159,10 @@ class ScRLService:
         
         if dataset == "paul15":
             session.adata = sc.datasets.paul15()
+        elif dataset == "simulation_decision":
+            session.adata = self._generate_decision_simulation()
+        elif dataset == "simulation_contribution":
+            session.adata = self._generate_contribution_simulation()
         else:
             raise ValueError(f"Unknown demo dataset: {dataset}")
         
@@ -169,6 +173,77 @@ class ScRLService:
             "n_genes": session.adata.n_vars,
             "obs_columns": list(session.adata.obs.columns)
         }
+    
+    def _generate_decision_simulation(self, n_cells: int = 1500, n_genes: int = 500):
+        """Generate simulated data for cell fate decision analysis"""
+        import anndata as ad
+        np.random.seed(42)
+        
+        # Create 3 cell populations representing different fate decisions
+        n_stem = n_cells // 3
+        n_fate1 = n_cells // 3
+        n_fate2 = n_cells - n_stem - n_fate1
+        
+        # Stem cells (starting population)
+        stem_X = np.random.randn(n_stem, n_genes) * 0.3
+        stem_time = np.linspace(0, 0.3, n_stem)
+        
+        # Fate 1 cells
+        fate1_X = np.random.randn(n_fate1, n_genes) * 0.3
+        fate1_X[:, :n_genes//3] += 2  # High expression of first gene set
+        fate1_time = np.linspace(0.3, 1.0, n_fate1)
+        
+        # Fate 2 cells
+        fate2_X = np.random.randn(n_fate2, n_genes) * 0.3
+        fate2_X[:, n_genes//3:2*n_genes//3] += 2  # High expression of second gene set
+        fate2_time = np.linspace(0.3, 1.0, n_fate2)
+        
+        X = np.vstack([stem_X, fate1_X, fate2_X])
+        pseudotime = np.concatenate([stem_time, fate1_time, fate2_time])
+        
+        adata = ad.AnnData(X)
+        adata.obs['pseudotime'] = pseudotime
+        adata.obs['cell_type'] = pd.Categorical(
+            ['Stem'] * n_stem + ['Fate1'] * n_fate1 + ['Fate2'] * n_fate2
+        )
+        adata.obs_names = [f"cell_{i}" for i in range(n_cells)]
+        adata.var_names = [f"gene_{i}" for i in range(n_genes)]
+        
+        # Add marker genes for each fate
+        adata.var['fate1_marker'] = [i < n_genes//3 for i in range(n_genes)]
+        adata.var['fate2_marker'] = [n_genes//3 <= i < 2*n_genes//3 for i in range(n_genes)]
+        
+        return adata
+    
+    def _generate_contribution_simulation(self, n_cells: int = 2000, n_genes: int = 800):
+        """Generate simulated data for gene contribution analysis"""
+        import anndata as ad
+        np.random.seed(123)
+        
+        # Create continuous trajectory with gene expression gradients
+        t = np.linspace(0, 1, n_cells)
+        X = np.zeros((n_cells, n_genes))
+        
+        # Different genes contribute at different stages
+        for i in range(n_genes):
+            # Each gene has peak expression at different pseudotime
+            peak_time = np.random.uniform(0, 1)
+            width = np.random.uniform(0.2, 0.5)
+            X[:, i] = np.exp(-((t - peak_time) ** 2) / (2 * width ** 2)) + np.random.randn(n_cells) * 0.1
+        
+        adata = ad.AnnData(X)
+        adata.obs['pseudotime'] = t
+        
+        # Assign cells to clusters based on pseudotime
+        n_clusters = 5
+        cluster_boundaries = np.linspace(0, 1, n_clusters + 1)
+        clusters = np.digitize(t, cluster_boundaries[1:-1])
+        adata.obs['cluster'] = pd.Categorical([f"C{c}" for c in clusters])
+        
+        adata.obs_names = [f"cell_{i}" for i in range(n_cells)]
+        adata.var_names = [f"gene_{i}" for i in range(n_genes)]
+        
+        return adata
     
     def preprocess(
         self,

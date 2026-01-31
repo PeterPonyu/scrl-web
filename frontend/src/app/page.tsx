@@ -67,7 +67,7 @@ export default function HomePage() {
 
   // Demo data mutation
   const demoMutation = useMutation({
-    mutationFn: () => dataApi.loadDemo('paul15'),
+    mutationFn: (dataset: string) => dataApi.loadDemo(dataset),
     onSuccess: (data) => {
       setSessionId(data.session_id);
       setDataInfo({ n_cells: data.n_cells, n_genes: data.n_genes });
@@ -206,7 +206,7 @@ export default function HomePage() {
             <p className="text-gray-600">{t.upload.suggestion}</p>
             <FileUploader
               onFileSelect={(file) => uploadMutation.mutate(file)}
-              onDemoSelect={() => demoMutation.mutate()}
+              onDemoSelect={(dataset) => demoMutation.mutate(dataset)}
               isLoading={isLoading}
             />
             {dataInfo && (

@@ -6,13 +6,59 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Query
 from fastapi.responses import JSONResponse
 import os
 import shutil
-from typing import Optional
+from typing import Optional, List, Literal
 
 from app.services import scrl_service
 from app.models import DataUploadResponse, PreprocessingConfig, PreprocessingResponse
 from app.core.config import settings
+from pydantic import BaseModel
 
 router = APIRouter()
+
+
+class DemoDatasetInfo(BaseModel):
+    """示例数据集信息"""
+    id: str
+    name: str
+    description: str
+    n_cells: int
+    n_genes: int
+    has_trajectory: bool
+    source: str
+
+
+@router.get("/demo-datasets", response_model=List[DemoDatasetInfo])
+async def list_demo_datasets():
+    """获取可用的示例数据集列表"""
+    return [
+        DemoDatasetInfo(
+            id="paul15",
+            name="Paul et al. 2015 (Mouse Hematopoiesis)",
+            description="Mouse bone marrow hematopoietic progenitor cell differentiation trajectory with 2730 cells",
+            n_cells=2730,
+            n_genes=3451,
+            has_trajectory=True,
+            source="scanpy.datasets.paul15()"
+        ),
+        DemoDatasetInfo(
+            id="simulation_decision",
+            name="Simulation - Cell Fate Decision",
+            description="Simulated single-cell data with clear cell fate decision points",
+            n_cells=1500,
+            n_genes=500,
+            has_trajectory=True,
+            source="simulation"
+        ),
+        DemoDatasetInfo(
+            id="simulation_contribution",
+            name="Simulation - Gene Contribution",
+            description="Simulated data for testing gene expression contribution analysis",
+            n_cells=2000,
+            n_genes=800,
+            has_trajectory=True,
+            source="simulation"
+        ),
+    ]
 
 
 @router.post("/upload", response_model=DataUploadResponse)
@@ -66,19 +112,17 @@ async def upload_data(file: UploadFile = File(...)):
 
 
 @router.post("/demo/{dataset}", response_model=DataUploadResponse)
-async def load_demo_data(dataset: str = "paul15"):
+async def load_demo_data(
+    dataset: Literal["paul15", "simulation_decision", "simulation_contribution"] = "paul15"
+):
     """
     Load a demo dataset for testing
     
     Available datasets:
     - paul15: Mouse hematopoiesis (Paul et al., 2015)
+    - simulation_decision: Simulated cell fate decision data
+    - simulation_contribution: Simulated gene contribution data
     """
-    if dataset not in ["paul15"]:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Unknown dataset: {dataset}. Available: paul15"
-        )
-    
     session = scrl_service.create_session()
     
     try:
